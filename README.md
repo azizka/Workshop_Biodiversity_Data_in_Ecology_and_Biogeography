@@ -1,4 +1,4 @@
-# Biodiversity_data_exercise
+# Biodiversity Data in Ecology and Biogeography
 
 This folder contains scripts and example data for the 'Biodiversity Data in Ecology and Biogeography' workshop held as part of the Botanikertagung 2017 in Kiel. 
 
@@ -12,13 +12,13 @@ This folder contains scripts and example data for the 'Biodiversity Data in Ecol
 # Schedule
 15:00 Lecture by Alexandre Antonelli setting the scene: where do we stand now in terms of biodiversity data? What are some of the main questions in ecology, evolution and biogeography that such data can be used to address? What are the main challenges, prospects and limitations?
 
- 15:45 Discussion of the lecture and a short break
+15:45 Discussion of the lecture and a short break
 
- 16:15 Software demonstration speciesgeocodeR and Infomap Bioregions
+16:15 Software demonstration speciesgeocodeR and Infomap Bioregions
 
- 17:00 Hands-on software exercises with time to discuss participants’ individual data and questions
+17:00 Hands-on software exercises with time to discuss participants’ individual data and questions
 
- 18:45 Wrap up
+18:45 Wrap up
 
 # Exercises
 The folder contains the below exercises for the participants to choose, depending on their skill level and interest. Each exercise includes an example dataset, some questions and a “solution script” so participants can use them later on their own data.
