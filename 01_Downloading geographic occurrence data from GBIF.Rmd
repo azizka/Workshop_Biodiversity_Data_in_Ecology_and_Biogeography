@@ -1,0 +1,26 @@
+---
+title: "Downloading geographic occurrence data from GBIF"
+author: "Alex Zizka"
+date: "16 September 2017"
+output: html_document
+---
+
+##Background
+The public availability of species distribution data has increased substantially in the last 10 years: occurrence information, mostly in the form of geographic coordinate records for species across the tree of life, representing hundreds of years of biological collection effort are now easily available. The global Biodiversity Information Facility (www.gbif.org) is one of the largest data providers, hosting more than 830 million records (Sept 2017) from a large variety of sources.
+
+##Outcomes
+After this exercise you will be able to retrieve species occurrence information from GBIF from within R. The purpose of this exercise is mostly to equip you with example data from your group of interest for the follow up exercises, so the it is rather short. See https://ropensci.org/tutorials/rgbif_tutorial.html for a more exhaustive tutorial on the rgbif package.
+
+##Exercise
+1. Use the `occ_count` function to see how many records are available for your group of interest in GBIF.
+2. Use the `occ_search` function to save the occurrences in the data.frame. For the this exercise make sure to limit the download to a reasonable number of records, for example using the `limit` argument.
+3. Control the download to relevant information using the `hasCoordinate`, `fields` and `return` arguments.
+4. Limit the search to a specific geographic area.
+5. Save the downloaded data to disk.
+
+<!-- ##Setup -->
+<!-- ```{r setup, include=FALSE} -->
+<!-- knitr::opts_chunk$set(echo = TRUE) -->
+<!-- library(rgbif) -->
+<!-- ``` -->
+
