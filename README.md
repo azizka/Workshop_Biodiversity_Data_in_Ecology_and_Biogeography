@@ -30,10 +30,6 @@ The folder contains the below exercises for the participants to choose, dependin
 * Combining point occurrences with phylogenies to estimate phylogenetic diversity indices (R)
 * Quantifying collection bias related to accessibility
 
-<<<<<<< HEAD
-# Background
-=======
 # Background:
->>>>>>> 00f75c4fcc45dc5547ed30f273c56135090d210a
 The public availability of large-scale species distribution data has increased drastically over the last ten years. In particular, the digitalization of collections from museums and herbaria, the input from human and machine observations, and the aggregation of information in public databases such as the Global Biodiversity Information Facility (GBIF) have contributed significantly to this development. This is leading to a ‘big data’ revolution in biogeography, which holds enormous potential for understanding large scale patterns and drivers of biodiversity. In this workshop, we will present some examples of how biodiversity data can be used to address key evolutionary and ecological questions, we will then familiarize with some of the tools available to use large species distribution data for analysing biodiversity, and we will address how to deal with common concerns such as data quality and sampling biases.
 
