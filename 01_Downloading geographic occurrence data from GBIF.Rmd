@@ -6,21 +6,100 @@ output: html_document
 ---
 
 ## Background
-The public availability of species distribution data has increased substantially in the last 10 years: occurrence information, mostly in the form of geographic coordinate records for species across the tree of life, representing hundreds of years of biological collection effort are now easily available. The global Biodiversity Information Facility (www.gbif.org) is one of the largest data providers, hosting more than 830 million records (Sept 2017) from a large variety of sources.
+The public availability of species distribution data has increased substantially in the last 10 years: occurrence information, mostly in the form of geographic coordinate records for species across the tree of life, representing hundreds of years of biological collection effort are now available. The global Biodiversity Information Facility (www.gbif.org) is one of the largest data providers, hosting more than 830 million records (Sept 2017) from a large variety of sources.
 
 ## Outcomes
 After this exercise you will be able to retrieve species occurrence information from GBIF from within R. The purpose of this exercise is mostly to equip you with example data from your group of interest for the follow up exercises, so the it is rather short. See https://ropensci.org/tutorials/rgbif_tutorial.html for a more exhaustive tutorial on the rgbif package.
 
 ## Exercise
-1. Use the `occ_count` function to see how many records are available for your group of interest in GBIF.
-2. Use the `occ_search` function to save the occurrences in the data.frame. For the this exercise make sure to limit the download to a reasonable number of records, for example using the `limit` argument.
-3. Control the download to relevant information using the `hasCoordinate`, `fields` and `return` arguments.
-4. Limit the search to a specific geographic area.
-5. Save the downloaded data to the working directory.
+We will use the rgbif package to obtain occurrence records from GBIF. As a hint you can find relevant functions for each task in the parentheses. You can get help on each function by typing `?FUNCTIONNAME`. 
 
-<!-- ##Setup -->
-<!-- ```{r setup, include=FALSE} -->
-<!-- knitr::opts_chunk$set(echo = TRUE) -->
-<!-- library(rgbif) -->
-<!-- ``` -->
+1. Download data for a single species and save them in a data.frame. For this exercise make sure to limit the download to a reasonable number of records (e.g. 5000), using the `limit` argument (`name_suggest`, `occ_search`).
+2. Download data for a higher taxonomic rank, for example a family. Again, make sure to set an appropriate limit.
+3. For later exercises we want to use the records of the Malvaceae subfamily 'Bombacoideae'. Download all records for this group ()
+4. Save the downloaded data to the working directory.
+5. Limit the search to a specific geographic area.
 
+
+Occurrence records from the Global Biodiversity Information Facility can be downloaded from their web portal (www.gbif.org), but there are also several ways to obtain records from within R. Getting records from within R has the advantage, that the analyses are fully reproducible and can be repeated automatically. rgbif is a package that offers exhaustive functionalities for obtaining data from GBIF. Here we will focus on the basic functions to obtain data for the follow up exercises. You can learn more on rgbif with [this vignette](https://ropensci.org/tutorials/rgbif_tutorial.html). Please note that there are licence requirements if you use GBIF data, which include a proper citation including DOI ([learn more here](https://www.gbif.org/citation-guidelines)).
+
+##Setup
+In this exercise we will use the rgbif library for communication with GBIF and the tidyverse library for data management.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(rgbif)
+library(tidyverse)
+```
+
+#Solutions
+In the following tutorial, we will go through the questions one-by-one. The suggested answers are by no means the only correct ones. 
+
+## 1. Download data for a single species and save them in a data.frame
+GBIF hosts a large number of records and downloading all records might take some time (also the download limit using `occ_search` is 250,000), so it is worth checking first how many records are available. We do this using the `return` argument of the `occ_search` function, which will only return meta-data on the record. For this exercise we will download records for the Malvaceae family. We'll first download data for a single species, the African baobab, _Adansonia digitata_:
+
+```{r occ_count}
+
+#The number of records for an individual species
+occ_search(scientificName = "Adansonia digitata", return =  "meta")$count
+
+# That is a feasible number so to download the data we wil just do:
+bao <- occ_search(scientificName = "Adansonia digitata", return =  "data", limit = 2000)
+bao
+
+```
+
+## 2. Download data for a higher taxonomic rank, for example a family.
+We are, however, interested not only in one species, but the entire family. We can search for higher rank taxa using GBIF's taxonKey. The taxonKey is a unique identifier for each taxon, we can obtain it from the taxon name via the `name _suggest` function.
+```{r}
+#Use the name_suggest function to download records for many species based on higher taxonomic ranks
+mal <- name_suggest(q = "Malvaceae", rank = "family")
+occ_search(taxonKey = mal$key, return = "meta")$count
+mal.rec <- occ_search(taxonKey = mal$key, return = "data", limit = 10000) #we limit the number of records to 10000, to restrict download time, remember to change this, if you want to download your own big dataset
+
+```
+
+## 3. Download Bombacoideae records on subfamily rank
+Unfortunately, downloading by subfamily is not recommendable due to taxonomic issues and because not all records are classified accordingly. Using the species keys from `name_lookup(q = Bombacoideae)` does not yield any records.  We'll therefor use a list of species, to download the records. We'll first get the GBIF taxonKey for all species in the list using the `name _suggest` function. You can either define the list directly in R, or if you want search for many species, you load a list from a text file. As an example, you can use the 'bombacoids_specs_list.txt' file. We are only interested in the actual data (no the meta-data), therefore `return = 'data'` and only those records that have coordinates (`hasCoordinate = T`).
+
+```{r}
+#You can either create the species list in R, or if it is long list, download it from 
+
+# splist <- c("Adansonia digitata", "Ceiba pentandra") #for few speceis define in R like this
+
+splist <- read_delim("Example_data/bombacoids_specs_list.txt", delim = "\t")%>%
+unlist(use.names = F)
+
+#get taxon keys
+keys <- lapply(as.list(splist), function(x) name_suggest(x, rank = "species"))%>%
+  bind_rows()%>%
+  filter(canonicalName %in% splist)%>%
+  dplyr::select(key)%>%
+  unlist(use.names = F)
+
+#obtain records
+bomb.occ <- occ_search(taxonKey = keys, limit=50000, return = 'data', hasCoordinate = T) # remember to change the limit
+```
+
+4. Save the downloaded data to the working directory.
+The code above gives a list of the same length as the number of keys supplied (three in this case, as _Ceiba pentandra_ has two keys) consisting of data.frames with the occurrence records and large number of additional columns. WE will get rid of unnecessary information in the next exercise. For now we only want to get the data in a single data.frame and write it to the working directory
+
+```{r}
+#sort out species without records
+bomb.out <- bomb.occ[sapply(bomb.occ, "length", USE.NAMES = F) != 1]%>%
+  bind_rows()
+
+write_csv(x = bomb.out, path = "bombacoideae_occurrences_gbif.csv")
+```
+
+## 5. Limit the search to a specific geographic area.
+The occ_search function has a large set of arguments that enable you to control its output. Often not all data for a species is required, for instance the `country` and `geometry` option limit the geographic extent. See `?occ_search` for other options.
+
+```{r}
+#limiting the search to Burkina Faso
+bomb.occ <- occ_search(taxonKey = keys, limit=200000, return = 'data', hasCoordinate = T, country = 'BF')
+
+#limiting the search to a rectangle around Kiel
+bomb.occ2 <- occ_search(taxonKey = keys, limit=200000, return = 'data', hasCoordinate = T, geometry = c(9.1, 53.3, 10.1, 55.3))
+
+```

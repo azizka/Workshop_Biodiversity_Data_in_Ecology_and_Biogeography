@@ -30,3 +30,38 @@ install_github(repo = "azizka/sampbias")
 library(sampbias)
 ```
 
+# Solutions
+
+## 1. Load the example distribution data from mammals on Borneo ("borneo_mammals.csv")
+```{r, message = F, warning = F}
+occ <- read.csv("input/borneo_mammals.csv", sep = "\t")
+```
+
+## 2. Run sampbias with the default settings. (SamplingBias)
+```{r, message = F, warning = F}
+bias.out <- SamplingBias(x = occ)
+```
+
+## 3. Look at the run summary and visualize the results. How informative are the results?
+```{r, message = F, warning = F}
+#summarize results
+summary(bias.out)
+
+#Visualize
+plot(bias.out)
+```
+
+## 4. Explore `?SamplingBias` and try to change the relevant arguments to improve the results. Summarize and visualize again.
+```{r, message = F, warning = F}
+bias.det <- SamplingBias(x = occ, res = 0.1)
+
+#summarize results
+summary(bias.det)
+
+#Visualize
+plot(bias.det)
+```
+
+
+
+
