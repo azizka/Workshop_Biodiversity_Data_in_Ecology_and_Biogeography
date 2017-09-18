@@ -14,7 +14,7 @@ This folder contains scripts and example data for the 'Biodiversity Data in Ecol
 
 15:45 Discussion of the lecture and a short break
 
-16:15 Software demonstration speciesgeocodeR and Infomap Bioregions
+16:15 Software demonstration speciesgeocodeR, Infomap Bioregions and SampBias
 
 17:00 Hands-on software exercises with time to discuss participants’ individual data and questions
 
