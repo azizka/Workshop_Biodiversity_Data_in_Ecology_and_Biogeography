@@ -29,7 +29,6 @@ The folder contains the below exercises for the participants to choose, dependin
 4. Using point occurrences for taxon-specific bioregionalization (GUI)
 5. Classifying species into descrete areas for historical biogeography (R)
 6. Quantifying collection bias related to accessibility (R & GUI)
-7. Visualizing species distribution patterns (R)
 
 # Background
 The public availability of large-scale species distribution data has increased drastically over the last ten years. In particular, the digitalization of collections from museums and herbaria, the input from human and machine observations, and the aggregation of information in public databases such as the Global Biodiversity Information Facility (GBIF) have contributed significantly to this development. This is leading to a ‘big data’ revolution in biogeography, which holds enormous potential for understanding large scale patterns and drivers of biodiversity. In this workshop, we will present some examples of how biodiversity data can be used to address key evolutionary and ecological questions, we will then familiarize with some of the tools available to use large species distribution data for analysing biodiversity, and we will address how to deal with common concerns such as data quality and sampling biases.
