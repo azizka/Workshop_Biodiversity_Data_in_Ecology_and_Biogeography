@@ -5,26 +5,32 @@ date: "16 September 2017"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+## Background
+Issues with data quality are a central issue hampering the use of publicly available species occurrence data in ecology and biogeography. Major problems are: data entry errors leading to erroneous occurrence records, imprecise geo-referencing mostly of pre-gps records and missing metadata specifying data entry and coordinate precision. Manual data cleaning based on expert knowledge can mostly detect these issues, but is only applicable for small taxonomic or geographic scales and is difficult to reproduce. Automated clean procedures are more scalable alternative.
+
+## Outcomes
+After this exercise you will be able to:
+1. Identify common problems in coordinates of biological collection datasets
+2. Use GBIF provided meta-data to improve coordinate quality in R
+3. Use automated cleaning algorithms to flag common problems
+
+## Exercise
+In this exercise we will use the lion example data, which you can find in the Example data folder, alternatively you can use your own data, or data obtained during the first exercise. You can find potentially useful R functions for each question in the brackets. Get help for all functions with ?FUNCTIONNAME. If you have no experience with R, but want to get familiar with the cleaning functions of speciesgeocodeR, please check out the graphical-user-interface app at . You can also find more tutorials at the speciesgeocodeR wiki (https://github.com/azizka/speciesgeocodeR/wiki).
+
+1. Load the example data (we will use "lion_gbif.csv"), and visualize the coordinates on a map.
+2. Check out the meta-data provided with each record and identify potential problems. A good starting point is to plot continuous variables as histogram and look at the values for discrete variables. Remove unsuitable records.
+3. Apply the automated cleaning as implemented in speciesgeocodeR, to remove problematic records.
+4. Apply the automated dataset level cleaning as implemented in speciesgeocodeR to identify datasets with low coordinate precision.
+5. Use the IUCN range map ("lions_IUCN_range"), to limit records to the natural range of the species.
+6. Visualize the results of all cleaning steps. Which ones where most useful?
+
+## Library setup
+You will need the following R libraries for this exercise, just copy the code chunk into you R console to load them. You might need to install some of them separately.
+
+```
+require(speciesgeocodeR)
+require(maptools)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

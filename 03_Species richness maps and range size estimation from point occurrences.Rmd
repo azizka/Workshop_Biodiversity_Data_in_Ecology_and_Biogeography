@@ -5,26 +5,25 @@ date: "16 September 2017"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+## Background
+Patterns of species richness and occurrence density are relevant information for study design, to communicate study results or to check data quality in any multi-species occurrence dataset. Species distributions can be estimated with a large array of methods, but in some cases a rough and quick estimation of species ranges is more suitable. The extent of occurrence based on convex hulls is used in conservation and macroecology to approximate species' ranges.
+
+## Outcomes
+After this exercise you will be able to:
+1. Visualize species richness patterns and occurrence record density in a quick and efficient way.
+2. Estimate species distribution ranges based, and create polygons of species distributions.
+
+## Exercise
+1. Load the example data (we will use "bombacoideae_gbif.csv"), and visualize the coordinates on a map.
+2. Visualize the number of occurrence records and the number of species in a regular-size grid.
+3. Estimate the range and range size for each species using a convex hull. Write the range maps to the working directory as ESRI-shape files.
+4. Visualize species richness per grid cell based on the range polygons.
+
+## Library setup
+You will need the following R libraries for this exercise, just copy the code chunk into you R console to load them. You might need to install some of them separately.
+
 ```
+require(speciesgeocodeR)
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+require(raster)
 ```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

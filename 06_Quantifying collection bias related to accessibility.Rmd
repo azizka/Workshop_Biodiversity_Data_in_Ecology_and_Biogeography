@@ -5,26 +5,28 @@ date: "16 September 2017"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+## Background
+Sampling effort is a critical measure for the reliability of present/absence projections from species occurrence data. However, dataset from publicly available databases based on biological collections are often comprised from various sources and compiled over large time periods and information on sampling effort is therefore most of the time unavailable. Physical accessibility of a region has been identified as major predictor of sampling effort, but this effect might vary among datasets. The SampBias software allows quantifying the effect of different anthropogenic structures (roads, airports, cities) on sampling in any given dataset based on geographic gazetteers. You can find a description of the methods here and tutorials on the use of SampBias [here](https://github.com/azizka/sampbias/wiki), a graphical user interface app with reduced functionality can be found [here](https://azizka.shinyapps.io/sampbias/). **NOTE SampBias is only available as beta version**
+
+## Outcome
+After this exercise you will be able to use the sampbias package to quantify the effect of accessibility on the sampling pattern in species occurrence dataset.
+
+## Exercise
+Helpful functions for answering each question are given in the brackets. In case you want to get a feeling for the functionality of SampBias, without using are, you can find a GUI app here.
+
+1. Load the example distribution data from mammals on Borneo (“borneo_mammals.csv”). (`read.csv`)
+2. Run sampbias with the default settings. (`SamplingBias`)
+3. Look at the run summary and visualize the results. How informative are the results? (`par, plot`)
+4. Explore ?SamplingBias and try to change the relevant arguments to improve the results. Summarize and visualize again.
+
+## Library setup
+You will need the following R libraries for this exercise, just copy the code chunk into you R console to load them. You might need to install some of them separately.
+
+```
+install.packages("devtools")
+library(devtools)
+
+install_github(repo = "azizka/sampbias")
+library(sampbias)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

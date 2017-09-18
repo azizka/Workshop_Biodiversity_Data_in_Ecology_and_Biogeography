@@ -5,26 +5,16 @@ date: "16 September 2017"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+## Background
+The vast majority of species occurrence information available, via 'big data' aggregators as GBIF are georeferenced point locations consisting of geographic coordinates. However, most methods for ancestral area estimation require species occurrences in a limited number of discrete geographic units. A manual classification of species based on expert knowledge or graphical-user-interface based GIS software are limited in the amount of data that can be processed and often hard to reproduce. SpeciesgeocodeR implements an easy-to-use function to classify species occurrence to discrete areas, accounting for issues in data quality. You can find detailed tutorials on the software [here](https://github.com/azizka/speciesgeocodeR/wiki) and articles disribing the method [here](https://academic.oup.com/sysbio/article/66/2/145/2670075/SpeciesGeoCoder-Fast-Categorization-of-Species) and [here](http://www.biorxiv.org/content/early/2015/11/24/032755).
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Outcomes
+After this exercise you will be able to assign species occurrences to predefined areas in an automated way, taking into account caveats on data quality.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Exercise
+1. Load the Bombacoideae_occurrences example file and classify each species as occurring or not occurring in the 14 WWF bioregions.
+2. Write the statistical and graphical summary to the working directory and check out the results. Which species and which occurrence records could not be classified?
+3. Write the area classification the working directory, in a format suitable for downstream analyses with (a) BioGeoBEARS, (b) BayArea and (c) in nexus format.
+4. Control the occurrence threshold option of the SpGeoOut function. Which effect do you observe, which fraction seems plausible?
+5. Include elevation into the classification [NOTE: This is only recommended for limited geographic extent and with good internet connection]
