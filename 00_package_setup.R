@@ -2,6 +2,7 @@ install.packages("rgbif")
 install.packages("devtools")
 install.packages("tidyverse")
 install.packages("countrycode")
+install.packages("raster")
 
 library(devtools)
 
