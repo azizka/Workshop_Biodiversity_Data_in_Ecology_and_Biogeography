@@ -1,8 +1,14 @@
-# Biodiversity Data in Ecology and Biogeography
+# Workshop: Biodiversity Data in Ecology and Biogeography
+
+_Date & time: Thursday 21st September, 15:00-19:00_
+_Location: The foyer and first floor of CAP3 (Christian-Albrechts Platz 3) in the same location as the Biodiversity Symposium_
+_presented by Alexandre Antonelli & Alexander Zizka, University of Gothenburg and Gothenburg Global Biodiversity Centre_
 
 This folder contains scripts and example data for the 'Biodiversity Data in Ecology and Biogeography' workshop held as part of the Botanikertagung 2017 in Kiel. 
 
-***BEFORE THE WORKSHOP: For the hands-on exercise please install [R]( https://cran.r-project.org/bin/) and [Rstudio](https://www.rstudio.com/products/rstudio/download/#download), and run the script '00_package_setup' to install dependencies.***
+**BEFORE THE WORKSHOP: For the hands-on exercise please install [R]( https://cran.r-project.org/bin/) and [Rstudio](https://www.rstudio.com/products/rstudio/download/#download), and run the script '00_package_setup'(see above, just copy the text of the script into you R console to install dependencies).**
+
+Please do not hesitate to contact us if you have any questions: alexander.zizka_at_bioenv.gu.se.
 
 # Objectives
 1. Provide an overview on new tools for using ‘big data’ occurrence data in biogeography and biodiversity science
@@ -14,11 +20,13 @@ This folder contains scripts and example data for the 'Biodiversity Data in Ecol
 
 15:45 Discussion of the lecture and a short break
 
-16:15 Software demonstration speciesgeocodeR, Infomap Bioregions and SampBias
+16:15 Software introduction and demonstration: speciesgeocodeR, Infomap Bioregions and SampBias
 
-17:00 Hands-on software exercises with time to discuss participants’ individual data and questions
+17:00 Short presentation of the participants and hands-on software exercises with time to discuss participants’ individual data and questions (depending on the number of participants)
 
 18:45 Wrap up
+
+after 19:00 Informal joint dinner at a close-by location for those interested.
 
 # Exercises
 The folder contains the below exercises for the participants to choose, depending on their skill level and interest. Each exercise includes an example dataset, some questions and a “solution script” so participants can use them later on their own data.
@@ -32,4 +40,5 @@ The folder contains the below exercises for the participants to choose, dependin
 
 # Background
 The public availability of large-scale species distribution data has increased drastically over the last ten years. In particular, the digitalization of collections from museums and herbaria, the input from human and machine observations, and the aggregation of information in public databases such as the Global Biodiversity Information Facility (GBIF) have contributed significantly to this development. This is leading to a ‘big data’ revolution in biogeography, which holds enormous potential for understanding large scale patterns and drivers of biodiversity. In this workshop, we will present some examples of how biodiversity data can be used to address key evolutionary and ecological questions, we will then familiarize with some of the tools available to use large species distribution data for analysing biodiversity, and we will address how to deal with common concerns such as data quality and sampling biases.
+
 
