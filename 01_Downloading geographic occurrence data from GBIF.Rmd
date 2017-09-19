@@ -32,74 +32,74 @@ library(rgbif)
 library(tidyverse)
 ```
 
-#Solutions
-In the following tutorial, we will go through the questions one-by-one. The suggested answers are by no means the only correct ones. 
+<!-- #Solutions -->
+<!-- In the following tutorial, we will go through the questions one-by-one. The suggested answers are by no means the only correct ones.  -->
 
-## 1. Download data for a single species and save them in a data.frame
-GBIF hosts a large number of records and downloading all records might take some time (also the download limit using `occ_search` is 250,000), so it is worth checking first how many records are available. We do this using the `return` argument of the `occ_search` function, which will only return meta-data on the record. For this exercise we will download records for the Malvaceae family. We'll first download data for a single species, the African baobab, _Adansonia digitata_:
+<!-- ## 1. Download data for a single species and save them in a data.frame -->
+<!-- GBIF hosts a large number of records and downloading all records might take some time (also the download limit using `occ_search` is 250,000), so it is worth checking first how many records are available. We do this using the `return` argument of the `occ_search` function, which will only return meta-data on the record. For this exercise we will download records for the Malvaceae family. We'll first download data for a single species, the African baobab, _Adansonia digitata_: -->
 
-```{r occ_count}
+<!-- ```{r occ_count} -->
 
-#The number of records for an individual species
-occ_search(scientificName = "Adansonia digitata", return =  "meta")$count
+<!-- #The number of records for an individual species -->
+<!-- occ_search(scientificName = "Adansonia digitata", return =  "meta")$count -->
 
-# That is a feasible number so to download the data we wil just do:
-bao <- occ_search(scientificName = "Adansonia digitata", return =  "data", limit = 2000)
-bao
+<!-- # That is a feasible number so to download the data we wil just do: -->
+<!-- bao <- occ_search(scientificName = "Adansonia digitata", return =  "data", limit = 2000) -->
+<!-- bao -->
 
-```
+<!-- ``` -->
 
-## 2. Download data for a higher taxonomic rank, for example a family.
-We are, however, interested not only in one species, but the entire family. We can search for higher rank taxa using GBIF's taxonKey. The taxonKey is a unique identifier for each taxon, we can obtain it from the taxon name via the `name _suggest` function.
-```{r}
-#Use the name_suggest function to download records for many species based on higher taxonomic ranks
-mal <- name_suggest(q = "Malvaceae", rank = "family")
-occ_search(taxonKey = mal$key, return = "meta")$count
-mal.rec <- occ_search(taxonKey = mal$key, return = "data", limit = 10000) #we limit the number of records to 10000, to restrict download time, remember to change this, if you want to download your own big dataset
+<!-- ## 2. Download data for a higher taxonomic rank, for example a family. -->
+<!-- We are, however, interested not only in one species, but the entire family. We can search for higher rank taxa using GBIF's taxonKey. The taxonKey is a unique identifier for each taxon, we can obtain it from the taxon name via the `name _suggest` function. -->
+<!-- ```{r} -->
+<!-- #Use the name_suggest function to download records for many species based on higher taxonomic ranks -->
+<!-- mal <- name_suggest(q = "Malvaceae", rank = "family") -->
+<!-- occ_search(taxonKey = mal$key, return = "meta")$count -->
+<!-- mal.rec <- occ_search(taxonKey = mal$key, return = "data", limit = 10000) #we limit the number of records to 10000, to restrict download time, remember to change this, if you want to download your own big dataset -->
 
-```
+<!-- ``` -->
 
-## 3. Download Bombacoideae records on subfamily rank
-Unfortunately, downloading by subfamily is not recommendable due to taxonomic issues and because not all records are classified accordingly. Using the species keys from `name_lookup(q = Bombacoideae)` does not yield any records.  We'll therefor use a list of species, to download the records. We'll first get the GBIF taxonKey for all species in the list using the `name _suggest` function. You can either define the list directly in R, or if you want search for many species, you load a list from a text file. As an example, you can use the 'bombacoids_specs_list.txt' file. We are only interested in the actual data (no the meta-data), therefore `return = 'data'` and only those records that have coordinates (`hasCoordinate = T`).
+<!-- ## 3. Download Bombacoideae records on subfamily rank -->
+<!-- Unfortunately, downloading by subfamily is not recommendable due to taxonomic issues and because not all records are classified accordingly. Using the species keys from `name_lookup(q = Bombacoideae)` does not yield any records.  We'll therefor use a list of species, to download the records. We'll first get the GBIF taxonKey for all species in the list using the `name _suggest` function. You can either define the list directly in R, or if you want search for many species, you load a list from a text file. As an example, you can use the 'bombacoids_specs_list.txt' file. We are only interested in the actual data (no the meta-data), therefore `return = 'data'` and only those records that have coordinates (`hasCoordinate = T`). -->
 
-```{r}
-#You can either create the species list in R, or if it is long list, download it from 
+<!-- ```{r} -->
+<!-- #You can either create the species list in R, or if it is long list, download it from  -->
 
-# splist <- c("Adansonia digitata", "Ceiba pentandra") #for few speceis define in R like this
+<!-- # splist <- c("Adansonia digitata", "Ceiba pentandra") #for few speceis define in R like this -->
 
-splist <- read_delim("Example_data/bombacoids_specs_list.txt", delim = "\t")%>%
-unlist(use.names = F)
+<!-- splist <- read_delim("Example_data/bombacoids_specs_list.txt", delim = "\t")%>% -->
+<!-- unlist(use.names = F) -->
 
-#get taxon keys
-keys <- lapply(as.list(splist), function(x) name_suggest(x, rank = "species"))%>%
-  bind_rows()%>%
-  filter(canonicalName %in% splist)%>%
-  dplyr::select(key)%>%
-  unlist(use.names = F)
+<!-- #get taxon keys -->
+<!-- keys <- lapply(as.list(splist), function(x) name_suggest(x, rank = "species"))%>% -->
+<!--   bind_rows()%>% -->
+<!--   filter(canonicalName %in% splist)%>% -->
+<!--   dplyr::select(key)%>% -->
+<!--   unlist(use.names = F) -->
 
-#obtain records
-bomb.occ <- occ_search(taxonKey = keys, limit=50000, return = 'data', hasCoordinate = T) # remember to change the limit
-```
+<!-- #obtain records -->
+<!-- bomb.occ <- occ_search(taxonKey = keys, limit=50000, return = 'data', hasCoordinate = T) # remember to change the limit -->
+<!-- ``` -->
 
-4. Save the downloaded data to the working directory.
-The code above gives a list of the same length as the number of keys supplied (three in this case, as _Ceiba pentandra_ has two keys) consisting of data.frames with the occurrence records and large number of additional columns. WE will get rid of unnecessary information in the next exercise. For now we only want to get the data in a single data.frame and write it to the working directory
+<!-- 4. Save the downloaded data to the working directory. -->
+<!-- The code above gives a list of the same length as the number of keys supplied (three in this case, as _Ceiba pentandra_ has two keys) consisting of data.frames with the occurrence records and large number of additional columns. WE will get rid of unnecessary information in the next exercise. For now we only want to get the data in a single data.frame and write it to the working directory -->
 
-```{r}
-#sort out species without records
-bomb.out <- bomb.occ[sapply(bomb.occ, "length", USE.NAMES = F) != 1]%>%
-  bind_rows()
+<!-- ```{r} -->
+<!-- #sort out species without records -->
+<!-- bomb.out <- bomb.occ[sapply(bomb.occ, "length", USE.NAMES = F) != 1]%>% -->
+<!--   bind_rows() -->
 
-write_csv(x = bomb.out, path = "bombacoideae_occurrences_gbif.csv")
-```
+<!-- write_csv(x = bomb.out, path = "bombacoideae_occurrences_gbif.csv") -->
+<!-- ``` -->
 
-## 5. Limit the search to a specific geographic area.
-The occ_search function has a large set of arguments that enable you to control its output. Often not all data for a species is required, for instance the `country` and `geometry` option limit the geographic extent. See `?occ_search` for other options.
+<!-- ## 5. Limit the search to a specific geographic area. -->
+<!-- The occ_search function has a large set of arguments that enable you to control its output. Often not all data for a species is required, for instance the `country` and `geometry` option limit the geographic extent. See `?occ_search` for other options. -->
 
-```{r}
-#limiting the search to Burkina Faso
-bomb.occ <- occ_search(taxonKey = keys, limit=200000, return = 'data', hasCoordinate = T, country = 'BF')
+<!-- ```{r} -->
+<!-- #limiting the search to Burkina Faso -->
+<!-- bomb.occ <- occ_search(taxonKey = keys, limit=200000, return = 'data', hasCoordinate = T, country = 'BF') -->
 
-#limiting the search to a rectangle around Kiel
-bomb.occ2 <- occ_search(taxonKey = keys, limit=200000, return = 'data', hasCoordinate = T, geometry = c(9.1, 53.3, 10.1, 55.3))
+<!-- #limiting the search to a rectangle around Kiel -->
+<!-- bomb.occ2 <- occ_search(taxonKey = keys, limit=200000, return = 'data', hasCoordinate = T, geometry = c(9.1, 53.3, 10.1, 55.3)) -->
 
-```
+<!-- ``` -->

@@ -1,12 +1,14 @@
 # Workshop: Biodiversity Data in Ecology and Biogeography
 
 _Date & time: Thursday 21st September, 15:00-19:00_
+
 _Location: The foyer and first floor of CAP3 (Christian-Albrechts Platz 3) in the same location as the Biodiversity Symposium_
+
 _presented by Alexandre Antonelli & Alexander Zizka, University of Gothenburg and Gothenburg Global Biodiversity Centre_
 
 This folder contains scripts and example data for the 'Biodiversity Data in Ecology and Biogeography' workshop held as part of the Botanikertagung 2017 in Kiel. 
 
-**BEFORE THE WORKSHOP: For the hands-on exercise please install [R]( https://cran.r-project.org/bin/) and [Rstudio](https://www.rstudio.com/products/rstudio/download/#download), and run the script '00_package_setup'(see above, just copy the text of the script into you R console to install dependencies).**
+**BEFORE THE WORKSHOP: For the hands-on exercise please install [R](https://cran.r-project.org/bin/) and [Rstudio](https://www.rstudio.com/products/rstudio/download/#download), and run the script '00_package_setup'(see above, just copy the text of the script into you R console to install dependencies).**
 
 Please do not hesitate to contact us if you have any questions: alexander.zizka_at_bioenv.gu.se.
 

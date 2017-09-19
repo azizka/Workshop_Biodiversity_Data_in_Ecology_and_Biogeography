@@ -33,144 +33,144 @@ require(tidyverse)
 require(countrycode)
 
 ```
-# Solutions
-The following code is a suggestion for data cleaning and are by no means guaranteed to be exhaustive or a one-size-fits it all solution. The hope is that they will significantly improve the dataset compared to the raw data. *Remember:* What  is 'good data' depends completely on the type of downstream analyses and their spatial scale. The cleaning here might be a good starting point for continental scale macroecological analyses or ancestral area estimation in historical biogeography. For this exercise we will simply exclude potentially problematic records, but it is of course also possible to go back into GBIF and double check each record thoroughly.
+<!-- # Solutions -->
+<!-- The following code is a suggestion for data cleaning and are by no means guaranteed to be exhaustive or a one-size-fits it all solution. The hope is that they will significantly improve the dataset compared to the raw data. *Remember:* What  is 'good data' depends completely on the type of downstream analyses and their spatial scale. The cleaning here might be a good starting point for continental scale macroecological analyses or ancestral area estimation in historical biogeography. For this exercise we will simply exclude potentially problematic records, but it is of course also possible to go back into GBIF and double check each record thoroughly. -->
 
-## 1. Load the example data, and visualize the coordinates on a map.
+<!-- ## 1. Load the example data, and visualize the coordinates on a map. -->
 
-GBIF provides a large amount of information for each record, leading to a huge data.frame with many columns. However some of this information is only available for few records, and thus for most analyses most of the columns can be dropped. Here, we will only retain information to identify the record and information that is important for cleaning up the data.
+<!-- GBIF provides a large amount of information for each record, leading to a huge data.frame with many columns. However some of this information is only available for few records, and thus for most analyses most of the columns can be dropped. Here, we will only retain information to identify the record and information that is important for cleaning up the data. -->
 
-```{r}
-dat <- read_csv("Example_data/bombacoideae_occurrences_gbif.csv")
+<!-- ```{r} -->
+<!-- dat <- read_csv("Example_data/bombacoideae_occurrences_gbif.csv") -->
 
-names(dat) #a lot of columns
+<!-- names(dat) #a lot of columns -->
 
-dat <- dat %>%
-  select(species, decimalLongitude, decimalLatitude, countryCode, individualCount,
-         gbifID, family, taxonRank, coordinateUncertaintyInMeters, year,
-         basisOfRecord, institutionCode, datasetName) # you might find other ones useful depending on your downstream analyses
+<!-- dat <- dat %>% -->
+<!--   select(species, decimalLongitude, decimalLatitude, countryCode, individualCount, -->
+<!--          gbifID, family, taxonRank, coordinateUncertaintyInMeters, year, -->
+<!--          basisOfRecord, institutionCode, datasetName) # you might find other ones useful depending on your downstream analyses -->
 
-```
-
-
-## 2. Visualize the coordinates on a map
-Visualizing the data on a map can be extremely helpful to understand potential problems and to identify problematic records. 
-
-```{r}
-wm <- borders("world", colour="gray50", fill="gray50")
-ggplot() + 
-  coord_fixed()+
-  wm + 
-  geom_point(data = dat, aes(x = decimalLongitude, y = decimalLatitude), 
-             colour = "darkblue", size = 0.5)
-```
+<!-- ``` -->
 
 
-## 3. Clean the coordinates based on available meta-data
-As you cans see there are a lot of unexpected occurrence locations, outside the current distribution range. We will find out the reasons for this in a minute. In this specific case we could relatively easily get rid of a large number of problematic records based on prior knowledge (lions should not occur outside Africa and India) but we usually do not have this kind of knowledge when dealing with larger datasets, so we will try to get rid of those records in different ways. GBIF data often contain a good number of meta-data that can help to locate problems. First we'll remove data without coordinates, coordinates with very low precision and the unsuitable data sources. WE will remove all records with a precision below 100km as this represent the grain size of many macro-ecological analyses, but the number is somewhat arbitrary and you best chose it based on your downstream analyses. We also exclude fossils as we are interested in recent distributions and records of unknown source, as we might deem them not reliable enough.
+<!-- ## 2. Visualize the coordinates on a map -->
+<!-- Visualizing the data on a map can be extremely helpful to understand potential problems and to identify problematic records.  -->
 
-```{r}
-#remove records without coordinates
-dat.cl <- filter(dat, !is.na(decimalLongitude) & !is.na(decimalLatitude))
-
-#remove records with low coordinate precision
-hist(dat.cl$coordinateUncertaintyInMeters/1000)
-
-dat.cl <- dat.cl %>% 
-  filter(coordinateUncertaintyInMeters/1000 <= 100 | is.na(coordinateUncertaintyInMeters))
-
-#remove unsuitable data sources, especially fossils
-table(dat$basisOfRecord)
-
-dat.cl <- filter(dat.cl, basisOfRecord == "HUMAN_OBSERVATION" | basisOfRecord == "OBSERVATION" |
-                         basisOfRecord == "PRESERVED_SPECIMEN")
-```
+<!-- ```{r} -->
+<!-- wm <- borders("world", colour="gray50", fill="gray50") -->
+<!-- ggplot() +  -->
+<!--   coord_fixed()+ -->
+<!--   wm +  -->
+<!--   geom_point(data = dat, aes(x = decimalLongitude, y = decimalLatitude),  -->
+<!--              colour = "darkblue", size = 0.5) -->
+<!-- ``` -->
 
 
-In the next step we will remove records with suspicious individual counts. GBIF for some reason also includes records of absence and suspiciously high occurrence counts might indicated inappropriate data or data entry problems. We might also want to exclude very old records, as they might be unreliable. Records from before the second world war are often unreliable, if they were georeferenced based on political entities, additionally old records might be likely form areas where species went extinct (for example due to land-use change).
+<!-- ## 3. Clean the coordinates based on available meta-data -->
+<!-- As you cans see there are a lot of unexpected occurrence locations, outside the current distribution range. We will find out the reasons for this in a minute. In this specific case we could relatively easily get rid of a large number of problematic records based on prior knowledge (lions should not occur outside Africa and India) but we usually do not have this kind of knowledge when dealing with larger datasets, so we will try to get rid of those records in different ways. GBIF data often contain a good number of meta-data that can help to locate problems. First we'll remove data without coordinates, coordinates with very low precision and the unsuitable data sources. WE will remove all records with a precision below 100km as this represent the grain size of many macro-ecological analyses, but the number is somewhat arbitrary and you best chose it based on your downstream analyses. We also exclude fossils as we are interested in recent distributions and records of unknown source, as we might deem them not reliable enough. -->
 
-```{r}
-#Individual count
-table(dat.cl$individualCount)
+<!-- ```{r} -->
+<!-- #remove records without coordinates -->
+<!-- dat.cl <- filter(dat, !is.na(decimalLongitude) & !is.na(decimalLatitude)) -->
 
-dat.cl <- dat.cl%>%
-  filter(individualCount > 0 | is.na(individualCount))%>%
-  filter(individualCount < 99 | is.na(individualCount)) # high counts are not a problem here
+<!-- #remove records with low coordinate precision -->
+<!-- hist(dat.cl$coordinateUncertaintyInMeters/1000) -->
 
-#age of record
-table(dat.cl$year)
+<!-- dat.cl <- dat.cl %>%  -->
+<!--   filter(coordinateUncertaintyInMeters/1000 <= 100 | is.na(coordinateUncertaintyInMeters)) -->
 
-dat.cl <- dat.cl%>%
-  filter(year > 1945)
-```
+<!-- #remove unsuitable data sources, especially fossils -->
+<!-- table(dat$basisOfRecord) -->
 
-On top of the geographic cleaning, we also want to make sure to only include species level records and records from the right taxon. The latter is not a problem in this case, as we only have one species, but it can be helpful for large datasets. Taxonomic problems such as spelling mistakes in the names or synonyms can be a severe problem. We'll not treat taxonomic cleaning here, but check out the [taxize R package](https://ropensci.org/tutorials/taxize_tutorial.html) or the [taxonomic name resolution service](http://tnrs.iplantcollaborative.org/) for that.
+<!-- dat.cl <- filter(dat.cl, basisOfRecord == "HUMAN_OBSERVATION" | basisOfRecord == "OBSERVATION" | -->
+<!--                          basisOfRecord == "PRESERVED_SPECIMEN") -->
+<!-- ``` -->
 
-```{r}
-table(dat.cl$family) #that looks good
-dat.cl <- dat.cl%>%
-  filter(family == 'Malvaceae')
 
-table(dat.cl$taxonRank) # this is also good
+<!-- In the next step we will remove records with suspicious individual counts. GBIF for some reason also includes records of absence and suspiciously high occurrence counts might indicated inappropriate data or data entry problems. We might also want to exclude very old records, as they might be unreliable. Records from before the second world war are often unreliable, if they were georeferenced based on political entities, additionally old records might be likely form areas where species went extinct (for example due to land-use change). -->
 
-```
+<!-- ```{r} -->
+<!-- #Individual count -->
+<!-- table(dat.cl$individualCount) -->
 
-We excluded almost 70% of the initial data points with the data cleaning! Most of them due to missing coordinates, but the general picture has improved considerably as well. We plot again.
+<!-- dat.cl <- dat.cl%>% -->
+<!--   filter(individualCount > 0 | is.na(individualCount))%>% -->
+<!--   filter(individualCount < 99 | is.na(individualCount)) # high counts are not a problem here -->
 
-```{r}
-wm <- borders("world", colour="gray50", fill="gray50")
-ggplot() + 
-  coord_fixed()+
-  wm + 
-  geom_point(data = dat.cl, aes(x = decimalLongitude, y = decimalLatitude), 
-             colour = "darkblue", size = 0.5)
+<!-- #age of record -->
+<!-- table(dat.cl$year) -->
 
-```
+<!-- dat.cl <- dat.cl%>% -->
+<!--   filter(year > 1945) -->
+<!-- ``` -->
 
-## 4. Apply the automated cleaning as implemented in speciesgeocodeR
-As a first step we will run the automatic cleaning algorithm of speciesgeocodeR. The `CleanCoordinates` function implements a large set of automated cleaning steps to flag errors that are common to coordinates from biological collections, including among others: sea coordinates, zero coordinates, coordinate - country mismatches, coordinates assigned to country and province centroids, outlier coordinates and coordinates assigned to biodiversity institutions. You can switch on each test individually and provide custom gazetteers for each test. To use the country - coordinate mismatch test we need to convert the country from ISO2 to ISO3 format. 
+<!-- On top of the geographic cleaning, we also want to make sure to only include species level records and records from the right taxon. The latter is not a problem in this case, as we only have one species, but it can be helpful for large datasets. Taxonomic problems such as spelling mistakes in the names or synonyms can be a severe problem. We'll not treat taxonomic cleaning here, but check out the [taxize R package](https://ropensci.org/tutorials/taxize_tutorial.html) or the [taxonomic name resolution service](http://tnrs.iplantcollaborative.org/) for that. -->
 
-```{r}
-#convert country code
-dat.cl$countryCode <-  countrycode(dat.cl$countryCode, origin =  'iso2c', destination = 'iso3c')
+<!-- ```{r} -->
+<!-- table(dat.cl$family) #that looks good -->
+<!-- dat.cl <- dat.cl%>% -->
+<!--   filter(family == 'Malvaceae') -->
 
-#flag problems
-flags <- CleanCoordinates(x = dat.cl[,2:3], countries = dat.cl$countryCode, species = dat.cl$species, countrycheck = T, outliers = T)
+<!-- table(dat.cl$taxonRank) # this is also good -->
 
-#Exclude problematic records
-dat.cl <- dat.cl[flags$summary,]
+<!-- ``` -->
 
-```
+<!-- We excluded almost 70% of the initial data points with the data cleaning! Most of them due to missing coordinates, but the general picture has improved considerably as well. We plot again. -->
 
-So we were able to additionally remove a substantial number of records with the automated cleaning. However, be aware that some potential problems remained, such as the records in Europe and northern North America, which most likely represent cultivated individuals we could not exclude automatically.
+<!-- ```{r} -->
+<!-- wm <- borders("world", colour="gray50", fill="gray50") -->
+<!-- ggplot() +  -->
+<!--   coord_fixed()+ -->
+<!--   wm +  -->
+<!--   geom_point(data = dat.cl, aes(x = decimalLongitude, y = decimalLatitude),  -->
+<!--              colour = "darkblue", size = 0.5) -->
 
-## 5. Apply the automated dataset level cleaning as implemented in speciesgeocodeR
-Some problems, in particular certain kinds of imprecisions, cannot be identified on the record level. For instance, many records are based on gridded sampling schemes or atlas projects, but are not easily identifiable as such. To identify these kind of problems speciesgeocodeR includes also dataset level tests, which search for periodicity in the decimals of occurrence records, and can indicate, if a substantial portion of the coordinates in a dataset have been subject to rounding or are nodes of a raster scheme. You can run this test either on the entire dataset, or on individual contributing dataset, e.g. all records from one museum, using the `CleanCoordinatesDS` function. See [here](https://github.com/azizka/speciesgeocodeR/wiki/1.-Automated-Cleaning-of-Geographic-Data) for more details.
-```{r}
-#For the total dataset
-dat.cl$datasettotal <- "TOTAL"
+<!-- ``` -->
 
-t.all <- dat.cl%>%
-  select(dataset = datasettotal, 
-         decimallongitude = decimalLongitude, 
-         decimallatitude = decimalLatitude)
+<!-- ## 4. Apply the automated cleaning as implemented in speciesgeocodeR -->
+<!-- As a first step we will run the automatic cleaning algorithm of speciesgeocodeR. The `CleanCoordinates` function implements a large set of automated cleaning steps to flag errors that are common to coordinates from biological collections, including among others: sea coordinates, zero coordinates, coordinate - country mismatches, coordinates assigned to country and province centroids, outlier coordinates and coordinates assigned to biodiversity institutions. You can switch on each test individually and provide custom gazetteers for each test. To use the country - coordinate mismatch test we need to convert the country from ISO2 to ISO3 format.  -->
 
-##Run dataset level test
-CleanCoordinatesDS(t.all)
+<!-- ```{r} -->
+<!-- #convert country code -->
+<!-- dat.cl$countryCode <-  countrycode(dat.cl$countryCode, origin =  'iso2c', destination = 'iso3c') -->
 
-#For individual datasets, this will take some time
-##Remove small datasets
-sel <- table(dat.cl$datasetName)
-sel <- sel[sel > 500]
+<!-- #flag problems -->
+<!-- flags <- CleanCoordinates(x = dat.cl[,2:3], countries = dat.cl$countryCode, species = dat.cl$species, countrycheck = T, outliers = T) -->
 
-t.ind <- dat.cl%>%
-  filter(dat.cl$datasetName %in% names(sel))%>%
-  select(dataset = datasetName, 
-         decimallongitude = decimalLongitude, 
-         decimallatitude = decimalLatitude)
+<!-- #Exclude problematic records -->
+<!-- dat.cl <- dat.cl[flags$summary,] -->
 
-##Run dataset level test
-CleanCoordinatesDS(t.ind)
-```
+<!-- ``` -->
 
-There is no evidence for periodicity in the entire dataset or its three biggest contributing datasets. Great!
+<!-- So we were able to additionally remove a substantial number of records with the automated cleaning. However, be aware that some potential problems remained, such as the records in Europe and northern North America, which most likely represent cultivated individuals we could not exclude automatically. -->
+
+<!-- ## 5. Apply the automated dataset level cleaning as implemented in speciesgeocodeR -->
+<!-- Some problems, in particular certain kinds of imprecisions, cannot be identified on the record level. For instance, many records are based on gridded sampling schemes or atlas projects, but are not easily identifiable as such. To identify these kind of problems speciesgeocodeR includes also dataset level tests, which search for periodicity in the decimals of occurrence records, and can indicate, if a substantial portion of the coordinates in a dataset have been subject to rounding or are nodes of a raster scheme. You can run this test either on the entire dataset, or on individual contributing dataset, e.g. all records from one museum, using the `CleanCoordinatesDS` function. See [here](https://github.com/azizka/speciesgeocodeR/wiki/1.-Automated-Cleaning-of-Geographic-Data) for more details. -->
+<!-- ```{r} -->
+<!-- #For the total dataset -->
+<!-- dat.cl$datasettotal <- "TOTAL" -->
+
+<!-- t.all <- dat.cl%>% -->
+<!--   select(dataset = datasettotal,  -->
+<!--          decimallongitude = decimalLongitude,  -->
+<!--          decimallatitude = decimalLatitude) -->
+
+<!-- ##Run dataset level test -->
+<!-- CleanCoordinatesDS(t.all) -->
+
+<!-- #For individual datasets, this will take some time -->
+<!-- ##Remove small datasets -->
+<!-- sel <- table(dat.cl$datasetName) -->
+<!-- sel <- sel[sel > 500] -->
+
+<!-- t.ind <- dat.cl%>% -->
+<!--   filter(dat.cl$datasetName %in% names(sel))%>% -->
+<!--   select(dataset = datasetName,  -->
+<!--          decimallongitude = decimalLongitude,  -->
+<!--          decimallatitude = decimalLatitude) -->
+
+<!-- ##Run dataset level test -->
+<!-- CleanCoordinatesDS(t.ind) -->
+<!-- ``` -->
+
+<!-- There is no evidence for periodicity in the entire dataset or its three biggest contributing datasets. Great! -->
