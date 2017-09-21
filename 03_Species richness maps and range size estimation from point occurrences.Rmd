@@ -24,6 +24,5 @@ You will need the following R libraries for this exercise, just copy the code ch
 
 ```
 require(speciesgeocodeR)
-
 require(raster)
 ```
