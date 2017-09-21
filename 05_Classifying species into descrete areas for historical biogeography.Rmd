@@ -18,3 +18,11 @@ After this exercise you will be able to assign species occurrences to predefined
 3. Write the area classification the working directory, in a format suitable for downstream analyses with (a) BioGeoBEARS, (b) BayArea and (c) in nexus format.
 4. Control the occurrence threshold option of the SpGeoOut function. Which effect do you observe, which fraction seems plausible?
 5. Include elevation into the classification [NOTE: This is only recommended for limited geographic extent and with good internet connection]
+
+## Library setup
+
+```{r}
+require(speciesgeocodeR)
+require(tidyverse)
+require(rgdal)
+```
